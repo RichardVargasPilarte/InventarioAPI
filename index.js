@@ -10,5 +10,5 @@ app.use(cors());
 app.use(json());
 
 app.listen(process.env.PORT, () => {
-    console.log('Ejecutando se en el puerto' + process.env.PORT);
+    console.log('Ejecutando se en el puerto: ' + process.env.PORT);
 });

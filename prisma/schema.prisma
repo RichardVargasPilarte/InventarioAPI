@@ -12,3 +12,49 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Articulo {
+  id           String   @id @default(uuid()) 
+  categoria_id String
+  categoria    Categoria @relation(fields: [categoria_id], references: [id])
+  codigo       String?   @db.VarChar(64)
+  nombre       String    @unique @db.VarChar(50)
+  descripcion  String?   @db.VarChar(255)
+  precio_venta Float
+  stock        Int
+  estado       Int       @default(1)
+  createdAt    DateTime  @default(now())
+  eliminado    String    @default("NO")
+
+  @@map("articulo")
+}
+
+model Categoria {
+  id          String   @id @default(uuid())
+  nombre      String   @unique @db.VarChar(50)
+  descripcion String?  @db.VarChar(255)
+  estado      Int      @default(1)
+  createdAt   DateTime @default(now())
+  eliminado   String    @default("NO")
+
+  @@map("categoria")
+  articulos   Articulo[] // Relación inversa con Articulo
+}
+
+model Usuario {
+  id              String   @id @default(uuid()) 
+  rol             String   @db.VarChar(30)   // Campo rol, con un máximo de 30 caracteres, requerido
+  nombre          String   @unique @db.VarChar(50) // Campo nombre, único, con un máximo de 50 caracteres, requerido
+  username        String   @unique @db.VarChar(30)
+  tipo_documento  String?  @db.VarChar(20)   // Campo opcional con un máximo de 20 caracteres
+  num_documento   String?  @db.VarChar(20)   // Campo opcional con un máximo de 20 caracteres
+  direccion       String?  @db.VarChar(70)   // Campo opcional con un máximo de 70 caracteres
+  telefono        String?  @db.VarChar(20)   // Campo opcional con un máximo de 20 caracteres
+  email           String   @unique @db.VarChar(50) // Campo email, único, con un máximo de 50 caracteres, requerido
+  password        String   @db.VarChar(64)   // Campo password con un máximo de 64 caracteres, requerido
+  estado          Int      @default(1)       // Campo estado con valor predeterminado de 1
+  createdAt       DateTime @default(now())   // Fecha de creación por defecto la actual
+  eliminado       String   @default("NO")
+
+  @@map("usuario") // Mapeo del modelo a la tabla 'usuario
+}
