@@ -2,7 +2,6 @@
   "name": "inventarioapi",
   "version": "1.0.0",
   "main": "index.js",
-  "type": "module",
   "scripts": {
     "start:dev": "nodemon index.js",
     "start": "node index.js"

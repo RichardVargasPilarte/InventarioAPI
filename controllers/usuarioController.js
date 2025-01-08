@@ -1,4 +1,31 @@
-export const crearUsuario = async (req, res, next) => {
+const { PrismaClient } = require('@prisma/client');
+
+const prisma = new PrismaClient();
+
+const obtenerUsuarios = async (req, res) => {
+    try {
+        const usuarios = await prisma.usuario.findMany({
+            where: {
+                eliminado: 'NO'
+            },
+            orderBy: {
+                createdAt: 'desc'
+            }
+        });
+
+        res.status(200).json({
+            usuarios
+        });
+    } catch (error) {
+        console.error('Error al obtener usuarios:', error);
+        res.status(500).json({
+            error: 'Error al obtener los usuarios'
+        });
+    }
+};
+
+
+const crearUsuario = async (req, res, next) => {
     try {
         const { nombre, username, email, password, ...data } = req.body;
 
@@ -43,7 +70,7 @@ export const crearUsuario = async (req, res, next) => {
 }
 
 
-export const obtenerUsuarioId = async (req, res, next) => {
+const obtenerUsuarioId = async (req, res, next) => {
     try {
         const usuarioId = req.params.id;
 
@@ -70,3 +97,5 @@ export const obtenerUsuarioId = async (req, res, next) => {
         next(error);
     }
 }
+
+module.exports = { obtenerUsuarios, crearUsuario, obtenerUsuarioId }
